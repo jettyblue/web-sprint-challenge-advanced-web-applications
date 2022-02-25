@@ -22,11 +22,11 @@ export default function LoginForm(props) {
   }
 
   const isDisabled = () => {
-    // if(username.trim().length >= 3) {
-    //   return username
-    // } else {
-    //   return 'Username must be at least 3 characters long'
-    // }
+    if(values.username.trim().length >= 3 && values.password.trim().length >= 8) {
+      return false
+    } else {
+      return true
+    }
   }
     // ✨ implement
     // Trimmed username must be >= 3, and
