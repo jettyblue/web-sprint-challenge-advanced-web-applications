@@ -38,8 +38,8 @@ export default function App() {
     // using the helper above.
 
   const login = ({ username, password }) => {
-    setMessage('')
     setSpinnerOn(true)
+    setMessage('')
     axios.post(loginUrl, { username, password })
       .then(res => {
         window.localStorage.setItem('token', res.data.token)
@@ -61,8 +61,8 @@ export default function App() {
     // to the Articles screen. Don't forget to turn off the spinner!
 
   const getArticles = () => {
+    setSpinnerOn(true) 
     setMessage('')
-    setSpinnerOn(true)
     axiosWithAuth().get(articlesUrl)
       .then(res => {
         console.log(res.data)
@@ -91,6 +91,8 @@ export default function App() {
   
 
   const postArticle = article => {
+    setSpinnerOn(true)
+    setMessage('')
     axiosWithAuth().post(articlesUrl, article)
       .then(res => {
         setArticles([...articles, res.data.article])
@@ -113,13 +115,32 @@ export default function App() {
     // to inspect the response from the server.
 
   const updateArticle = ({ article_id, article }) => {
-    axiosWithAuth().put(`${articlesUrl}/${article_id}`, article)
+    setSpinnerOn(true)
+    axiosWithAuth().put(
+      `${articlesUrl}/${article_id}`,
+      { title: article.title, text: article.text, topic: article.topic }
+    )
       .then(res => {
-        setMessage(`Nice update, ${username}`)
+        // setArticles([...articles, res.data.articles])
+        setMessage(res.data.message)
       })
       .catch(err => {
         console.error(err)
       })
+      .finally(() => {
+        setSpinnerOn(false)
+      })
+
+      const rtnArray = []
+      for(let i = 0; i < articles.length; i++) {
+        if(articles[i].article_id === article_id) {
+          rtnArray.push(article)
+        } else {
+          rtnArray.push(articles[i])
+        }
+      }
+      setArticles(rtnArray)
+      setCurrentArticleId(null)
   }
     // ✨ implement
     // You got this!
@@ -159,19 +180,18 @@ export default function App() {
           <Route path="articles" element={
             <>
               <ArticleForm 
-                article={articles.find((art) => {
-                  return art.id == currentArticleId
+                currentArticle={articles.find((art) => {
+                  return art.article_id == currentArticleId
                 })}
                 postArticle={postArticle}
                 updateArticle={updateArticle}
-                setCurrentArticleId={setCurrentArticleId}
-                currentArticle={currentArticleId}
+                currentArticleId={currentArticleId}
               />
               <Articles 
                 articles={articles}
-                setCurrentArticleId={setCurrentArticleId}
                 getArticles={getArticles}
                 deleteArticle={deleteArticle}
+                setCurrentArticleId={setCurrentArticleId}
               />
             </>
           } />

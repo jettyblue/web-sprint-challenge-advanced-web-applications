@@ -7,6 +7,7 @@ export default function Articles(props) {
     articles,
     getArticles,
     deleteArticle,
+    updateArticle,
     setCurrentArticleId,
     currentArticleId
   } = props
@@ -24,7 +25,7 @@ export default function Articles(props) {
     // ✨ grab the articles here, on first render only
   
   const handleClick = evt => {
-    // (evt.target.value)
+    (evt.target.value)
     console.log('edit button clicked')
   }
 
@@ -45,8 +46,8 @@ export default function Articles(props) {
                   <p>Topic: {art.topic}</p>
                 </div>
                 <div>
-                  <button disabled={true} onClick={handleClick}>Edit</button>
-                  <button disabled={true} onClick={() => {deleteArticle(art.article_id)}}>Delete</button>
+                  <button onClick={handleClick}>Edit</button>
+                  <button onClick={() => {deleteArticle(art.article_id)}}>Delete</button>
                 </div>
               </div>
             )

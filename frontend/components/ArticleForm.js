@@ -29,7 +29,7 @@ export default function ArticleForm(props) {
   const onSubmit = evt => {
     evt.preventDefault()
     if(currentArticle) {
-      updateArticle(currentArticle.id, values)
+      updateArticle(currentArticleId, values)
     } else {
       postArticle(values)
     }
@@ -54,7 +54,7 @@ export default function ArticleForm(props) {
     // ✨ fix the JSX: make the heading display either "Edit" or "Create"
     // and replace Function.prototype with the correct function
     <form id="form" onSubmit={onSubmit}>
-      <h2>{!currentArticle ? 'Create' : 'Edit'} Article</h2>
+      <h2>{currentArticle ? 'Edit' : 'Create'} Article</h2>
       <input
         maxLength={50}
         onChange={onChange}
