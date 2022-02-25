@@ -26,6 +26,7 @@ export default function App() {
 
   const logout = () => {
     window.localStorage.removeItem('token')
+    setMessage('Goodbye!')
     redirectToLogin()
   }
     // ✨ implement
@@ -35,8 +36,10 @@ export default function App() {
     // using the helper above.
 
   const login = ({ username, password }) => {
+    setSpinnerOn(true)
     axios.post(loginUrl, { username, password })
       .then(res => {
+        setSpinnerOn(false)
         window.localStorage.setItem('token', res.data.token)
         setMessage(res.data.message)
         redirectToArticles()
@@ -53,10 +56,11 @@ export default function App() {
     // to the Articles screen. Don't forget to turn off the spinner!
 
   const getArticles = () => {
-    // spinnerOn()
+    setSpinnerOn(true)
     axiosWithAuth().get(articlesUrl)
       .then(res => {
         console.log(res.data)
+        setSpinnerOn(false)
         setArticles(res.data.articles)
         setMessage(res.data.message)
       })
@@ -115,8 +119,8 @@ export default function App() {
         setArticles(articles.filter((art) => {
           return art.id != article_id
         }))
-        // turn off spinner
-        // success message
+        setSpinnerOn(false)
+        setMessage(res.data.message)
       })
       .catch(err => {
         if(err.response.status == 401) {
