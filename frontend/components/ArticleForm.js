@@ -5,14 +5,21 @@ const initialFormValues = { title: '', text: '', topic: '' }
 
 export default function ArticleForm(props) {
   const [values, setValues] = useState(initialFormValues)
+  const { postArticle, updateArticle, currentArticle, setCurrentArticleId } = props
   // ✨ where are my props? Destructure them here
 
   useEffect(() => {
+    if(currentArticle) {
+      setValues(currentArticle)
+    } else {
+      setValues(initialFormValues)
+    }
+  }, [currentArticle])
     // ✨ implement
     // Every time the `currentArticle` prop changes, we should check it for truthiness:
     // if it's truthy, we should set its title, text and topic into the corresponding
     // values of the form. If it's not, we should reset the form back to initial values.
-  })
+  
 
   const onChange = evt => {
     const { id, value } = evt.target
@@ -21,10 +28,17 @@ export default function ArticleForm(props) {
 
   const onSubmit = evt => {
     evt.preventDefault()
+    if(currentArticle) {
+      updateArticle(currentArticle.id, values)
+    } else {
+      postArticle(values)
+    }
+    setValues(initialFormValues)
+  }
     // ✨ implement
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
-  }
+  
 
   const isDisabled = () => {
     // ✨ implement
@@ -35,7 +49,7 @@ export default function ArticleForm(props) {
     // ✨ fix the JSX: make the heading display either "Edit" or "Create"
     // and replace Function.prototype with the correct function
     <form id="form" onSubmit={onSubmit}>
-      <h2>Create Article</h2>
+      <h2>{!currentArticle ? 'Create' : 'Edit'} Article</h2>
       <input
         maxLength={50}
         onChange={onChange}
@@ -58,7 +72,7 @@ export default function ArticleForm(props) {
       </select>
       <div className="button-group">
         <button disabled={isDisabled()} id="submitArticle">Submit</button>
-        <button onClick={Function.prototype}>Cancel edit</button>
+        <button onClick={onChange}>Cancel edit</button>
       </div>
     </form>
   )
