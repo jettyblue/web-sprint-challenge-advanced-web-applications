@@ -22,11 +22,16 @@ export default function LoginForm(props) {
   }
 
   const isDisabled = () => {
+    // if(username.trim().length >= 3) {
+    //   return username
+    // } else {
+    //   return 'Username must be at least 3 characters long'
+    // }
+  }
     // ✨ implement
     // Trimmed username must be >= 3, and
     // trimmed password must be >= 8 for
     // the button to become enabled
-  }
 
   return (
     <form id="loginForm" onSubmit={onSubmit}>
